@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista de Proyectos</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Noto Sans JP', sans-serif; }
+  .font-impact { font-family: 'Anton', sans-serif; }
+</style>
+</head>
+<body class="bg-[#050b1a] text-white min-h-screen">
+
+  <div class="relative min-h-screen w-full">
+
+    <!-- Ambient glow -->
+    <div class="pointer-events-none fixed -top-32 -left-24 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl"></div>
+    <div class="pointer-events-none fixed -bottom-32 -right-24 h-96 w-96 rounded-full bg-fuchsia-600/10 blur-3xl"></div>
+
+    <!-- Kanji watermark -->
+    <span class="pointer-events-none select-none fixed top-10 right-6 sm:right-16 text-[6rem] sm:text-[8rem] leading-none text-cyan-400/5 font-impact">計画</span>
+
+    <main class="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+
+      <header class="mb-10 text-center">
+        <p class="text-cyan-400 text-xs tracking-[0.3em] uppercase mb-2">プロジェクト・マネージャー</p>
+        <h1 class="font-impact text-3xl sm:text-4xl uppercase tracking-tight text-white">
+          Mis <span class="text-cyan-300">Proyectos</span>
+        </h1>
+      </header>
+
+      {% if proyectos %}
+      <ul class="space-y-4">
+        {% for proyecto in proyectos %}
+        <li>
+          <article class="border border-cyan-400/20 bg-[#0a1428] rounded-lg px-5 py-5 sm:px-7 sm:py-6 hover:border-cyan-400/50 transition-colors">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+
+              <div class="flex-1 min-w-0">
+                <h2 class="text-lg sm:text-xl font-semibold text-white truncate">
+                  {{ proyecto.nombre }}
+                </h2>
+                <p class="mt-1 text-sm text-cyan-100/60 leading-relaxed">
+                  {{ proyecto.descripcion }}
+                </p>
+                <p class="mt-3 inline-flex items-center gap-2 text-xs text-cyan-300/80 uppercase tracking-wider">
+                  <span class="h-1.5 w-1.5 rounded-full bg-cyan-400"></span>
+                  Duración: {{ proyecto.duracion }}
+                </p>
+              </div>
+
+              <nav class="flex sm:flex-col gap-2 shrink-0" aria-label="Acciones del proyecto">
+                <a href="{% url 'ver_proyecto' proyecto.id %}"
+                   class="text-center px-4 py-2 text-sm rounded-md border border-cyan-400/40 text-cyan-300 hover:bg-cyan-400/10 transition-colors">
+                  Ver detalle
+                </a>
+                <a href="{% url 'eliminar_proyecto' proyecto.id %}"
+                   onclick="return confirm('¿Esta seguro de elimar el proyecto?')"
+                   class="text-center px-4 py-2 text-sm rounded-md border border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-500/10 transition-colors">
+                  Eliminar
+                </a>
+              </nav>
+
+            </div>
+          </article>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-center text-cyan-100/50 py-16">
+        No hay proyectos registrados todavía.
+      </p>
+      {% endif %}
+
+    </main>
+
+  </div>
+
+</body>
+</html>
