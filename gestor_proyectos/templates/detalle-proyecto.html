@@ -9,117 +9,230 @@
     <style>
         body {
             background: #f8fafc;
+            /* Fondo sutil con un patrón para darle más profundidad */
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
         }
         .detalle-card {
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .detalle-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
         }
-        /* Para darle un toque más refinado a los campos */
         .campo-label {
-            letter-spacing: 0.01em;
+            letter-spacing: 0.02em;
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 md:p-8 font-sans antialiased">
+<body class="min-h-screen flex items-center justify-center p-4 md:p-8 font-sans antialiased text-slate-800">
 
-    <div class="w-full max-w-2xl bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl p-6 md:p-10 border border-white/40">
+    <div class="w-full max-w-3xl bg-white/80 backdrop-blur-md rounded-3xl shadow-xl shadow-slate-200/50 p-6 md:p-10 border border-white">
 
-        <!-- Cabecera con navegación simple (estilo consistente) -->
-        <div class="flex items-center gap-3 mb-8 border-b border-slate-200/80 pb-5">
-            <div class="bg-indigo-100 p-3 rounded-xl text-indigo-600">
+        <!-- Cabecera con navegación simple -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-8 border-b border-slate-200/80 pb-6">
+            <div class="bg-indigo-100/80 p-3 rounded-2xl text-indigo-600 shadow-sm self-start sm:self-auto">
                 <i class="fa-regular fa-folder-open text-2xl"></i>
             </div>
             <div class="flex-1">
-                <h1 class="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">
+                <h1 class="text-2xl md:text-3xl font-extrabold text-slate-800 tracking-tight">
                     Detalle del proyecto
                 </h1>
-                <p class="text-sm text-slate-500 font-light">
+                <p class="text-sm text-slate-500 font-medium mt-1">
                     Información completa del proyecto seleccionado
                 </p>
             </div>
 
-            <!-- Botón para editar el proyecto -->
-            <a href="{% url 'editar_proyecto' proyecto.id %}" 
-               class="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl border border-indigo-600 hover:bg-indigo-700 hover:border-indigo-700 transition-all duration-150 shadow-sm hover:shadow">
-                <i class="fa-solid fa-pen"></i>
-                <span class="hidden sm:inline">Editar</span>
-            </a>
-
-            <!-- Enlace para volver a la lista (misma línea visual) -->
-            <a href="{% url 'proyectos' %}" 
-               class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-600 text-sm font-medium rounded-xl border border-slate-200/60 hover:bg-slate-200 hover:border-slate-300 transition-all duration-150 shadow-sm hover:shadow">
-                <i class="fa-solid fa-square-caret-left"></i>
-                <span class="hidden sm:inline">Volver</span>
-            </a>
+            <!-- Botones de Acción Superiores -->
+            <div class="flex items-center gap-2 mt-2 sm:mt-0">
+                <a href="{% url 'proyectos' %}" 
+                   class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-white text-slate-600 text-sm font-semibold rounded-xl border border-slate-200 hover:bg-slate-50 hover:text-slate-900 transition-all duration-200 shadow-sm hover:shadow">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span class="hidden sm:inline">Volver</span>
+                </a>
+                <a href="{% url 'editar_proyecto' proyecto.id %}" 
+                   class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl border border-indigo-600 hover:bg-indigo-700 hover:border-indigo-700 transition-all duration-200 shadow-sm hover:shadow shadow-indigo-200">
+                    <i class="fa-solid fa-pen"></i>
+                    <span class="hidden sm:inline">Editar</span>
+                </a>
+            </div>
         </div>
 
-        <!-- Tarjeta de detalle (con los campos requeridos) -->
-        <div class="detalle-card bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm">
+        <!-- Tarjeta de detalle -->
+        <div class="detalle-card bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm mb-8 relative overflow-hidden">
+            <!-- Decoración sutil de fondo -->
+            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-indigo-50 rounded-full blur-2xl opacity-60"></div>
 
-            <!-- Nombre del proyecto (destacado) -->
-            <div class="flex items-start gap-3 mb-6">
-                <div class="bg-indigo-50 p-2.5 rounded-xl text-indigo-500 mt-0.5">
+            <!-- Nombre del proyecto -->
+            <div class="flex items-start gap-4 mb-6 relative z-10">
+                <div class="bg-indigo-50 p-2.5 rounded-xl text-indigo-500 mt-1 shadow-inner border border-indigo-100/50">
                     <i class="fa-solid fa-tag"></i>
                 </div>
                 <div>
-                    <h2 class="text-xl md:text-2xl font-bold text-slate-800 break-words">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-800 break-words leading-tight">
                         {{ proyecto.nombre }}
                     </h2>
-                    <span class="inline-block mt-1.5 text-xs font-mono bg-indigo-50 text-indigo-600 px-3 py-0.5 rounded-full border border-indigo-100/70">
-                        <i class="fa-regular fa-hashtag mr-1"></i> ID: {{ proyecto.id }}
+                    <span class="inline-flex items-center mt-2 text-xs font-mono font-medium bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md border border-indigo-100">
+                        <i class="fa-solid fa-fingerprint mr-1.5 opacity-70"></i> ID: {{ proyecto.id }}
                     </span>
                 </div>
             </div>
 
-            <!-- Descripción (campo requerido) -->
-            <div class="flex items-start gap-3 mb-6 border-t border-slate-100 pt-5">
-                <div class="bg-slate-50 p-2.5 rounded-xl text-slate-400 mt-0.5">
+            <!-- Descripción -->
+            <div class="flex items-start gap-4 mb-6 border-t border-slate-100 pt-6 relative z-10">
+                <div class="bg-slate-50 p-2.5 rounded-xl text-slate-400 mt-0.5 border border-slate-100">
                     <i class="fa-solid fa-align-left"></i>
                 </div>
                 <div class="flex-1 min-w-0">
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider campo-label">
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest campo-label mb-1.5">
                         Descripción
                     </p>
-                    <p class="text-base text-slate-700 leading-relaxed mt-1 break-words">
+                    <p class="text-sm md:text-base text-slate-600 leading-relaxed break-words">
                         {{ proyecto.descripcion }}
                     </p>
                 </div>
             </div>
 
-            <!-- Duración (campo requerido) -->
-            <div class="flex items-start gap-3 border-t border-slate-100 pt-5">
-                <div class="bg-slate-50 p-2.5 rounded-xl text-slate-400 mt-0.5">
+            <!-- Duración -->
+            <div class="flex items-start gap-4 border-t border-slate-100 pt-6 relative z-10">
+                <div class="bg-slate-50 p-2.5 rounded-xl text-slate-400 mt-0.5 border border-slate-100">
                     <i class="fa-regular fa-clock"></i>
                 </div>
                 <div>
-                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider campo-label">
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest campo-label mb-1.5">
                         Duración estimada
                     </p>
-                    <p class="text-base text-slate-700 font-medium mt-1 flex items-center gap-2">
-                        <span class="bg-indigo-50/70 px-3 py-1 rounded-full text-indigo-700 border border-indigo-100/60">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center bg-indigo-50 px-3 py-1.5 rounded-lg text-sm font-semibold text-indigo-700 border border-indigo-100">
                             {{ proyecto.duracion }}
                         </span>
-                        <span class="text-xs text-slate-400 font-light">(tiempo estimado)</span>
-                    </p>
+                        <span class="text-xs text-slate-400 font-medium italic">estimado</span>
+                    </div>
                 </div>
             </div>
 
         </div>
-
-        <!-- Pie con información sutil -->
-        <div class="mt-6 text-xs text-slate-400/80 flex justify-between items-center">
-            <span class="flex items-center gap-1.5">
-                <i class="fa-regular fa-circle-check text-emerald-400"></i>
-                Vista detallada
-            </span>
-            <span class="flex items-center gap-1.5">
-                <i class="fa-solid fa-square-caret-left"></i>
-                <a href="{% url 'proyectos' %}" class="hover:text-indigo-500 transition-colors">
-                    Ir a la lista
+        
+        <!-- Sección de Tareas -->
+        <div>
+            <!-- Encabezado de tareas -->
+            <div class="flex items-center justify-between gap-4 mb-5 px-1">
+                <h2 class="text-lg md:text-xl font-bold text-slate-800 flex items-center gap-2.5">
+                    <div class="p-1.5 bg-emerald-100 text-emerald-600 rounded-lg">
+                        <i class="fa-solid fa-list-check text-sm"></i>
+                    </div>
+                    Tareas del proyecto
+                </h2>
+                <a href="{% url 'crear_tarea' proyecto.id %}"
+                   class="inline-flex items-center gap-1.5 px-3 py-2 md:px-4 md:py-2.5 bg-slate-800 text-white text-sm font-semibold rounded-xl hover:bg-slate-900 transition-all shadow-sm hover:shadow-md">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span>Nueva tarea</span>
                 </a>
+            </div>
+
+            <!-- Lista de Tareas -->
+            <ul class="space-y-3">
+                {% for tarea in proyecto.tareas.all %}
+                    <li class="group flex flex-col sm:flex-row sm:items-center justify-between p-4 md:p-5 rounded-2xl border transition-all duration-200 gap-4
+                        {% if tarea.estado == 'COMPLETADA' %}
+                            bg-emerald-50/40 border-emerald-100 hover:border-emerald-200
+                        {% else %}
+                            bg-white border-slate-200 hover:border-indigo-200 hover:shadow-md hover:shadow-indigo-50/50
+                        {% endif %}">
+                        
+                        <!-- Título e Ícono -->
+                        <div class="flex items-center gap-3.5">
+                            <div class="transition-colors duration-300
+                                {% if tarea.estado == 'COMPLETADA' %}
+                                    text-emerald-500
+                                {% else %}
+                                    text-slate-300 group-hover:text-indigo-400
+                                {% endif %}">
+                                <i class="fa-solid fa-circle-check text-xl md:text-2xl"></i>
+                            </div>
+                            <span class="text-sm md:text-base font-semibold transition-colors duration-300
+                                {% if tarea.estado == 'COMPLETADA' %}
+                                    text-slate-400 line-through decoration-slate-300
+                                {% else %}
+                                    text-slate-700 group-hover:text-slate-900
+                                {% endif %}">
+                                {{ tarea.titulo }}
+                            </span>
+                        </div>
+                        
+                        <!-- Contenedor Flex para Badges y Botones de Acción agrupados -->
+                        <div class="flex flex-wrap items-center gap-2 mt-1 sm:mt-0 pl-9 sm:pl-0">
+                            
+                            <!-- Badge Prioridad -->
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border bg-white text-slate-600 border-slate-200 text-xs font-bold shadow-sm">
+                                <i class="fa-solid fa-flag text-slate-400 text-[10px]"></i>
+                                {{ tarea.get_prioridad_display }}
+                            </span>
+                            
+                            <!-- Lógica de botones de Estado -->
+                            {% if tarea.estado == 'COMPLETADA' %}
+                                <!-- Badge estático de estado completado -->
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border bg-emerald-100 text-emerald-700 border-emerald-200 text-xs font-bold shadow-sm">
+                                    <i class="fa-solid fa-check-double text-emerald-600"></i>
+                                    Completada
+                                </span>
+                            {% else %}
+                                <!-- Botón Avanzar Estado -->
+                                <form action="{% url 'avanzar_estado_tarea' tarea.id %}" method="post" class="m-0">
+                                    {% csrf_token %}
+                                    <button type="submit" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-colors shadow-sm cursor-pointer text-xs font-bold">
+                                        {{ tarea.get_estado_display }}
+                                        <i class="fa-solid fa-arrow-right-long text-[10px] opacity-80"></i>
+                                    </button>
+                                </form>
+
+                                <!-- Botón Finalizar Tarea -->
+                                <form action="{% url 'finalizar_estado_tarea' tarea.id %}" method="post" class="m-0">
+                                    {% csrf_token %}
+                                    <button type="submit" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border bg-slate-50 text-slate-600 border-slate-200 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 transition-colors shadow-sm cursor-pointer text-xs font-bold">
+                                        Finalizar
+                                        <i class="fa-solid fa-check text-[10px]"></i>
+                                    </button>
+                                </form>
+                            {% endif %}
+
+                            <!-- Separador visual pequeño (solo visible en pantallas grandes) -->
+                            <div class="hidden sm:block w-px h-5 bg-slate-200 mx-1"></div>
+
+                            <!-- Botón Eliminar (Rojo oscuro al hover) -->
+                            <form action="{% url 'eliminar_tarea' tarea.id %}" method="post" class="m-0">
+                                {% csrf_token %}
+                                <button onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea permanentemente?')" 
+                                        type="submit" 
+                                        title="Eliminar tarea"
+                                        class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-red-600 bg-red-500 text-white hover:bg-red-700 hover:border-red-800 transition-all duration-200 shadow-sm shadow-red-200 cursor-pointer">
+                                    <i class="fa-solid fa-trash-can text-sm"></i>
+                                </button>
+                            </form>
+                        </div>
+                        
+                    </li>
+                {% empty %}
+                    <!-- Estado vacío (Empty state) -->
+                    <div class="text-center py-12 px-4 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white shadow-sm border border-slate-100 mb-4">
+                            <i class="fa-solid fa-clipboard-list text-2xl text-slate-300"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-700 mb-1">No hay tareas creadas</h3>
+                        <p class="text-sm text-slate-500 max-w-sm mx-auto">Este proyecto aún no tiene tareas asociadas. Haz clic en el botón de "Nueva tarea" para empezar a organizar el trabajo.</p>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Pie de página -->
+        <div class="mt-8 pt-6 border-t border-slate-200/60 text-xs font-medium text-slate-400 flex justify-between items-center">
+            <span class="flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-halved text-slate-300"></i>
+                Gestor de Proyectos Seguro
+            </span>
+            <span>
+                Modificado recientemente
             </span>
         </div>
 
