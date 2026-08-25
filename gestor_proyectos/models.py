@@ -20,7 +20,7 @@ class Tarea(models.Model):
     ]  
     ESTADO_CHOICES = [
         ('PENDIENTE', 'Pendiente'),
-        ('EN_PROGRESO', 'En progreso'),
+        ('EN_PROGRESO', 'En_progreso'),
         ('COMPLETADA', 'Completada'),
     ]
     
@@ -34,6 +34,7 @@ class Tarea(models.Model):
     )
     
     titulo = models.CharField(max_length=50)
+    
     prioridad = models.CharField(
         max_length=5,
         choices= PRIORIDAD_CHOICES,
