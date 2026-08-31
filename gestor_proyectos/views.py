@@ -11,28 +11,8 @@ def mostrar_proyectos (request):
     proyectos = Proyecto.objects.all()
     return render(request, 'proyectos.html', {'proyectos':proyectos})
     
-def nuevos_registros(request):
-    
-    proyectos = [
-    
-        Proyecto(nombre="Aplicacion de bancaria", descripcion = "Aplicacion web para gestionar los tramites bancarios ", duracion= 1000),
-        Proyecto(nombre="Aplicacion de Mensajeria", descripcion = "Aplicacion web para gestionar los mensajes y llamadas", duracion= 200),
-        Proyecto(nombre="Tienda Virtual", descripcion = "Aplicacion web para comprar y vender productos en liena", duracion= 700)
-        
-        ]
-    
 
     
-    for p in proyectos:
-        p.save()
-    
-    return HttpResponse('Registro guardado. ')
-    
-'''
-** EN SQL **
-INSERT INTO proyecto (nombre, descripcion, duracion)VALUES
-("Aplicacion de biblioteca","Aplicacion web para gestionar los libros y prestamos de la biblioteca", 200)
-'''
 
 def ver_proyecto(request, id):
     proyecto= Proyecto.objects.get(id=id)
@@ -44,18 +24,34 @@ def nuevo_proyecto (request):
         nombre = request.POST.get('nombre')
         descripcion = request.POST.get('descripcion')
         duracion = request.POST.get('duracion')
+        imagen = request.FILES.get('imagen')
         
         if nombre and descripcion and duracion:
             proyecto = Proyecto(
                 nombre = nombre,
                 descripcion = descripcion,
                 duracion = duracion,
+                imagen = imagen,
                 )
             proyecto.save()
             return redirect('proyectos')
             
     return render(request, 'nuevo-proyecto.html')
 
+def nuevos_registros(request):
+    
+    proyectos = [
+    
+        Proyecto(nombre="Aplicacion de bancaria", descripcion = "Aplicacion web para gestionar los tramites bancarios ", duracion= 1000),
+        Proyecto(nombre="Aplicacion de Mensajeria", descripcion = "Aplicacion web para gestionar los mensajes y llamadas", duracion= 200),
+        Proyecto(nombre="Tienda Virtual", descripcion = "Aplicacion web para comprar y vender productos en liena", duracion= 700)
+        
+        ]
+
+    for p in proyectos:
+        p.save()
+    
+    return HttpResponse('Registro guardado. ')
 '''
 def crear_proyecto(request):
     nombre = request.POST.get('nombre')
