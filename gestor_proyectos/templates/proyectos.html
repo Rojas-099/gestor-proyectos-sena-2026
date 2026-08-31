@@ -1,84 +1,142 @@
-{% load static %}
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+Proyectos activos
+{% endblock %}
+{% block content %}
+
+<div class="w-full max-w-4xl bg-theme-black-900/80 backdrop-blur-sm rounded-3xl shadow-2xl shadow-black/50 p-6 md:p-10 border border-theme-black-800">
+
+        <!-- Cabecera clara -->
+        <div class="flex items-center gap-3 mb-8 border-b border-theme-black-800 pb-5">
+            <div class="bg-theme-black-800 p-3 rounded-xl text-theme-beige-500 border border-theme-black-700">
+                <i class="fa-solid fa-list-check text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-theme-beige-100 tracking-tight">
+                    Proyectos activos
+                </h1>
+                <p class="text-sm text-theme-beige-300/70 font-light">
+                    Lista de todos los proyectos registrados
+                </p>
+            </div>
+        </div>
+
+        <!-- Lista de proyectos -->
+        {% if proyectos %}
+            <ul class="space-y-4 divide-y divide-theme-black-800">
+                {% for proyecto in proyectos %}
+                <li class="proyecto-card pt-4 first:pt-0 rounded-2xl p-4 -mx-2 hover:bg-theme-black-800/40 transition-colors duration-200">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <!-- Información del proyecto -->
+                        <div class="flex-1 min-w-0">
+                            <h2 class="text-lg font-semibold text-theme-beige-100 flex items-center gap-2">
+                                <span class="bg-theme-black-800 text-theme-beige-500 text-xs font-mono px-2 py-0.5 rounded-full border border-theme-black-700">
+                                    #{{ forloop.counter }}
+                                </span>
+                                <img src="{{ proyecto.imagen.url }}" alt="{{ proyecto.nombre }}" class="h-10">
+                                {{ proyecto.nombre }}
+                            </h2>
+                            <p class="text-sm text-theme-beige-300 mt-0.5 line-clamp-2 max-w-2xl">
+                                {{ proyecto.descripcion }}
+                            </p>
+                            <div class="flex items-center gap-1 mt-1.5 text-xs text-theme-beige-300/50">
+                                <i class="fa-regular fa-clock"></i>
+                                <span>Duración estimada: <span class="font-medium text-theme-beige-300/80">{{ proyecto.duracion }}</span></span>
+                            </div>
+                        </div>
+
+                        <!-- Acciones -->
+                        <div class="flex items-center gap-2 shrink-0 mt-2 md:mt-0">
+                            <!-- Enlace a detalle -->
+                            <a href="{% url 'ver_proyecto' proyecto.id %}"
+                               class="inline-flex items-center gap-1.5 px-4 py-2 bg-theme-beige-500 text-theme-black-950 text-sm font-medium rounded-xl border border-theme-beige-500 hover:bg-theme-beige-300 hover:border-theme-beige-300 transition-all duration-150 shadow-sm hover:shadow-[0_0_15px_rgba(212,196,168,0.2)]">
+                                <i class="fa-regular fa-eye"></i>
+                                <span class="hidden sm:inline">Ver</span> detalle
+                            </a>
+                            <!-- Enlace a eliminar -->
+                            <a href="{% url 'eliminar_proyecto' proyecto.id %}"
+                                onclick="return confirm('¿Está seguro de eliminar el proyecto?')"
+                               class="inline-flex items-center gap-1.5 px-4 py-2 bg-theme-black-800 text-theme-beige-300/70 text-sm font-medium rounded-xl border border-theme-black-700 hover:bg-theme-black-700 hover:text-theme-beige-100 hover:border-theme-black-600 transition-all duration-150 shadow-sm">
+                                <i class="fa-regular fa-trash-can"></i>
+                                <span class="hidden sm:inline">Eliminar</span>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <!-- Mensaje cuando no hay proyectos -->
+            <div class="text-center py-12 px-4 bg-theme-black-900/50 rounded-2xl border border-dashed border-theme-black-700">
+                <i class="fa-regular fa-folder-open text-4xl text-theme-beige-500/30 mb-3"></i>
+                <p class="text-theme-beige-300/80 font-light text-lg">No hay proyectos disponibles</p>
+                <p class="text-sm text-theme-beige-300/50 mt-1">Comienza creando tu primer proyecto.</p>
+            </div>
+        {% endif %}
+
+        <!-- Footer sutil -->
+        <div class="mt-8 pt-5 border-t border-theme-black-800 flex justify-between items-center text-xs text-theme-beige-300/50">
+            <span class="flex items-center gap-1.5">
+                <i class="fa-regular fa-hard-drive"></i>
+                {{ proyectos|length }} proyecto{{ proyectos|pluralize }}
+            </span>
+            <span class="flex items-center gap-1.5">
+                <i class="fa-regular fa-calendar"></i>
+                <span>v1.0 · Django</span>
+            </span>
+        </div>
+
+    </div>
+
+{% endblock %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lista de Proyectos</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Noto Sans JP', sans-serif; }
-  .font-impact { font-family: 'Anton', sans-serif; }
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Proyectos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'theme-black': {
+                950: '#050505',
+                900: '#121212',
+                800: '#1f1f1f',
+                700: '#2e2e2e',
+              },
+              'theme-beige': {
+                500: '#d4c4a8',
+                300: '#e8ddc8',
+                100: '#fdfbf7',
+              },
+            }
+          }
+        }
+      }
+    </script>
+    <!-- Font Awesome para iconos (opcional, pero aporta claridad visual) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* Solo un par de ajustes mínimos para mantenerlo limpio y profesional,
+           todo lo demás es Tailwind puro. No se usan clases personalizadas. */
+        /* Transición suave para las tarjetas y sombra oscura */
+        .proyecto-card {
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .proyecto-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+    </style>
 </head>
-<body class="bg-[#050b1a] text-white min-h-screen">
+<body class="min-h-screen flex items-start justify-center p-4 md:p-8 font-sans antialiased bg-theme-black-950 text-theme-beige-100" >
 
-  <div class="relative min-h-screen w-full">
-
-    <!-- Ambient glow -->
-    <div class="pointer-events-none fixed -top-32 -left-24 h-96 w-96 rounded-full bg-cyan-500/10 blur-3xl"></div>
-    <div class="pointer-events-none fixed -bottom-32 -right-24 h-96 w-96 rounded-full bg-fuchsia-600/10 blur-3xl"></div>
-
-    <!-- Kanji watermark -->
-    <span class="pointer-events-none select-none fixed top-10 right-6 sm:right-16 text-[6rem] sm:text-[8rem] leading-none text-cyan-400/5 font-impact">計画</span>
-
-    <main class="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-
-      <header class="mb-10 text-center">
-        <p class="text-cyan-400 text-xs tracking-[0.3em] uppercase mb-2">プロジェクト・マネージャー</p>
-        <h1 class="font-impact text-3xl sm:text-4xl uppercase tracking-tight text-white">
-          Mis <span class="text-cyan-300">Proyectos</span>
-        </h1>
-      </header>
-
-      {% if proyectos %}
-      <ul class="space-y-4">
-        {% for proyecto in proyectos %}
-        <li>
-          <article class="border border-cyan-400/20 bg-[#0a1428] rounded-lg px-5 py-5 sm:px-7 sm:py-6 hover:border-cyan-400/50 transition-colors">
-            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-
-              <div class="flex-1 min-w-0">
-                <h2 class="text-lg sm:text-xl font-semibold text-white truncate">
-                  {{ proyecto.nombre }}
-                </h2>
-                <p class="mt-1 text-sm text-cyan-100/60 leading-relaxed">
-                  {{ proyecto.descripcion }}
-                </p>
-                <p class="mt-3 inline-flex items-center gap-2 text-xs text-cyan-300/80 uppercase tracking-wider">
-                  <span class="h-1.5 w-1.5 rounded-full bg-cyan-400"></span>
-                  Duración: {{ proyecto.duracion }}
-                </p>
-              </div>
-
-              <nav class="flex sm:flex-col gap-2 shrink-0" aria-label="Acciones del proyecto">
-                <a href="{% url 'ver_proyecto' proyecto.id %}"
-                   class="text-center px-4 py-2 text-sm rounded-md border border-cyan-400/40 text-cyan-300 hover:bg-cyan-400/10 transition-colors">
-                  Ver detalle
-                </a>
-                <a href="{% url 'eliminar_proyecto' proyecto.id %}"
-                   onclick="return confirm('¿Esta seguro de elimar el proyecto?')"
-                   class="text-center px-4 py-2 text-sm rounded-md border border-fuchsia-500/40 text-fuchsia-300 hover:bg-fuchsia-500/10 transition-colors">
-                  Eliminar
-                </a>
-              </nav>
-
-            </div>
-          </article>
-        </li>
-        {% endfor %}
-      </ul>
-      {% else %}
-      <p class="text-center text-cyan-100/50 py-16">
-        No hay proyectos registrados todavía.
-      </p>
-      {% endif %}
-
-    </main>
-
-  </div>
+    
 
 </body>
 </html>
