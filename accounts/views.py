@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect , get_object_or_404
 from django.contrib.auth import login
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
+from django.contrib.auth.decorators import user_passes_test
 
 def registro(request):
     datos = ""
@@ -43,3 +44,43 @@ def registro(request):
             return redirect('home')
         
     return render(request, 'registro.html', {'errors':errors, 'datos':datos})
+
+def es_admin(user):
+    return user.is_authenticated and user.is_staff
+
+@user_passes_test(es_admin)
+def grupos (request):
+    if request.method == "POST":
+        nombre = request.POST.get('nombre').strip()
+        if nombre and not Group.objects.filter(name = nombre).exists():
+            Group.objects.create(name=nombre)    
+        return redirect('grupos')
+    
+    
+    
+    grupos =  Group.objects.all()
+    return render(request, 'grupos.html', {'grupos': grupos})
+
+
+@user_passes_test(es_admin)
+def eliminar_grupo(request, id_grupo):
+    if request.method == 'POST':
+        grupo = get_object_or_404(Group, id=id_grupo)
+        grupo.delete()
+        
+    return redirect('grupos')
+        
+        
+@user_passes_test(es_admin)
+def editar_grupo(request, id_grupo):
+    grupo = Group.objects.get(id=id_grupo)
+        
+    if request.method == "POST":
+        nombre = request.POST.get('nombre')
+        if nombre :
+            grupo.name = nombre
+            grupo.save()
+            
+            return redirect ('grupos')
+        
+    return render(request, 'editar-grupo.html', {'grupo': grupo})
